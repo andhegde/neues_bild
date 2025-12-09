@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsives Portfolio | Max Mustermann</title>
+    <!-- Tailwind CSS laden -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Icon-Bibliothek (Lucide) laden -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Wichtig: CSS-Einstellung für sanftes Scrollen */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Konfiguration für die 'Inter' Schriftart */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        /* --- Definierte Farben aus der Palette --- */
+        /* Overcast: #F1F1F2 (Sehr hell / Haupt-Hintergrund) */
+        /* Warm Gray: #BCBABE (Akzent-Hintergrund für Boxen/Header) */
+        /* Glacier Blue: #1995AD (Primärfarbe / Akzent) */
+        /* Dark Blue: #0E1A2B (Dunkle Textfarbe für Kontrast) */
+
+        body {
+            background-color: #F1F1F2; /* Helles Grau (Overcast) als neuer Haupt-Hintergrund */
+            color: #0E1A2B; /* Dunkelblau als Haupttextfarbe für Kontrast */
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* --- Custom Color Utility Klassen (Glacier Palette) --- */
+        /* Primary (Glacier Blue) */
+        .color-primary { color: #1995AD; }
+        .bg-primary { background-color: #1995AD; }
+        .border-primary { border-color: #1995AD; }
+        .hover\:bg-primary:hover { background-color: #1995AD; }
+        .hover\:text-primary:hover { color: #1995AD; }
+        
+        /* Accent Background (Warm Gray) */
+        .bg-accent { background-color: #BCBABE; } /* Warm Gray für Boxen */
+        .border-accent { border-color: #1995AD; }
+
+        /* Custom Scrollbar Styling (angepasst für hellen Hintergrund) */
+        body::-webkit-scrollbar {
+            width: 8px;
+        }
+        body::-webkit-scrollbar-thumb {
+            background-color: #1995AD; /* Glacier Blue */
+            border-radius: 4px;
+        }
+        body::-webkit-scrollbar-track {
+            background-color: #F1F1F2;
+        }
+        /* Styling für den mobilen Menü-Button */
+        .menu-icon {
+            cursor: pointer;
+            z-index: 50;
+        }
+        /* Responsives Bild für Mobilgeräte */
+        .profile-img {
+            aspect-ratio: 1/1;
+            object-fit: cover;
+        }
+        /* Hinzufügen eines leichten Padding oben, um den Header beim Scrollen zu berücksichtigen */
+        section {
+            padding-top: 6rem; /* 96px */
+            margin-top: -6rem; /* Korrigiert den Sprung, wenn der sticky Header vorhanden ist */
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Navigationsleiste (Header) -->
+    <header class="sticky top-0 z-40 bg-accent bg-opacity-95 shadow-lg backdrop-blur-sm border-b border-[#A1D6E2]">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <!-- Logo / Name -->
+            <a href="#home" class="text-3xl font-extrabold color-primary hover:text-[#0E1A2B] transition-colors">
+                Max M.
+            </a>
+
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex space-x-8 text-lg">
+                <!-- Textfarbe auf Dunkelblau ändern -->
+                <a href="#home" class="text-[#0E1A2B] hover:text-primary transition duration-300 font-medium">Home</a>
+                <a href="#about" class="text-[#0E1A2B] hover:text-primary transition duration-300 font-medium">Über mich</a>
+                <a href="#skills" class="text-[#0E1A2B] hover:text-primary transition duration-300 font-medium">Fähigkeiten</a>
+                <a href="#portfolio" class="text-[#0E1A2B] hover:text-primary transition duration-300 font-medium">Portfolio</a>
+                <a href="#contact" class="text-[#0E1A2B] hover:text-primary transition duration-300 font-medium">Kontakt</a>
+            </div>
+
+            <!-- Mobiles Menü-Icon (Hamburger) -->
+            <button id="menu-toggle" class="md:hidden text-[#0E1A2B] p-2 rounded-lg hover:bg-[#F1F1F2] transition menu-icon">
+                <i data-lucide="menu" class="w-8 h-8"></i>
+            </button>
+        </nav>
+
+        <!-- Mobiles Dropdown-Menü -->
+        <div id="mobile-menu" class="hidden md:hidden absolute w-full bg-accent shadow-xl border-t border-[#A1D6E2] transition-all duration-300">
+            <!-- Textfarbe auf Dunkelblau ändern und Hover-Hintergrund heller machen -->
+            <a href="#home" class="block py-3 px-4 text-[#0E1A2B] hover:bg-[#F1F1F2] font-medium transition" onclick="toggleMenu()">Home</a>
+            <a href="#about" class="block py-3 px-4 text-[#0E1A2B] hover:bg-[#F1F1F2] font-medium transition" onclick="toggleMenu()">Über mich</a>
+            <a href="#skills" class="block py-3 px-4 text-[#0E1A2B] hover:bg-[#F1F1F2] font-medium transition" onclick="toggleMenu()">Fähigkeiten</a>
+            <a href="#portfolio" class="block py-3 px-4 text-[#0E1A2B] hover:bg-[#F1F1F2] font-medium transition" onclick="toggleMenu()">Portfolio</a>
+            <a href="#contact" class="block py-3 px-4 text-[#0E1A2B] hover:bg-[#F1F1F2] font-medium transition" onclick="toggleMenu()">Kontakt</a>
+        </div>
+    </header>
+
+    <!-- HINWEIS: Haupt-Content-Div für Padding und Layout-Konsistenz -->
+    <div class="px-4 sm:px-6 lg:px-8">
+        
+        <!-- Hero Sektion (#home) -->
+        <section id="home" class="container mx-auto pt-16 md:pt-24 pb-16">
+            <div class="flex flex-col md:flex-row items-center md:justify-between gap-12">
+                
+                <!-- Linke Spalte (Text und CTA) -->
+                <div class="md:w-1/2 text-center md:text-left order-2 md:order-1">
+                    <p class="text-xl sm:text-2xl color-primary mb-2 font-semibold animate-pulse">Hallo, ich bin</p>
+                    <!-- Überschrift wird dunkel -->
+                    <h1 class="text-5xl sm:text-7xl font-extrabold leading-tight text-[#0E1A2B] mb-4">
+                        Max <span class="color-primary">Mustermann</span>
+                    </h1>
+                    <!-- Sekundäre Überschrift wird dunkleres Grau -->
+                    <h2 class="text-2xl sm:text-3xl text-gray-700 mb-6 font-light">
+                        Full Stack Entwickler & Web Designer
+                    </h2>
+                    
+                    <!-- Absatztext wird dunkleres Grau -->
+                    <p class="text-lg text-gray-600 mb-8 max-w-lg md:max-w-none mx-auto md:mx-0">
+                        Ich verwandle Ideen in pixelgenaue, performante und benutzerfreundliche Web-Anwendungen. Mit einem Fokus auf moderne Technologien und responsivem Design.
+                    </p>
+
+                    <!-- Call to Action Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                        <!-- Primary Button: Textfarbe ist bereits Dunkelblau (vom Body), Hover-Hintergrund auf Hellgrau -->
+                        <button class="px-8 py-3 bg-primary text-[#F1F1F2] font-bold rounded-lg shadow-lg hover:bg-[#A1D6E2] hover:text-[#0E1A2B] transition duration-300 transform hover:scale-105 active:scale-95">
+                            <i data-lucide="download" class="w-5 h-5 inline-block mr-2"></i>
+                            CV herunterladen
+                        </button>
+                        <!-- Secondary Button: Textfarbe auf Dunkelblau ändern, Hover-Hintergrund auf Primärfarbe ändern -->
+                        <a href="#contact" class="px-8 py-3 border border-primary text-[#0E1A2B] font-bold rounded-lg shadow-lg hover:bg-primary hover:text-[#F1F1F2] transition duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center">
+                            <i data-lucide="mail" class="w-5 h-5 inline-block mr-2"></i>
+                            Kontakt aufnehmen
+                        </a>
+                    </div>
+
+                    <!-- Soziale Medien Icons (dunkleres Grau für Kontrast) -->
+                    <div class="mt-8 flex gap-4 justify-center md:justify-start text-gray-700">
+                        <a href="https://linkedin.com/in/example" target="_blank" class="hover:text-primary transition">
+                            <i data-lucide="linkedin" class="w-6 h-6"></i>
+                        </a>
+                        <a href="https://github.com/example" target="_blank" class="hover:text-primary transition">
+                            <i data-lucide="github" class="w-6 h-6"></i>
+                        </a>
+                        <a href="https://twitter.com/example" target="_blank" class="hover:text-primary transition">
+                            <i data-lucide="twitter" class="w-6 h-6"></i>
+                        </a>
+                    </div>
+
+                </div>
+                
+                <!-- Rechte Spalte (Profilbild) -->
+                <div class="md:w-1/2 flex justify-center order-1 md:order-2">
+                    <!-- Profilbild: Ersetzt den Platzhalter durch das gewünschte Unsplash-Bild -->
+                    <div class="w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 bg-accent rounded-full p-2 border-4 border-primary shadow-[0_0_20px_#1995AD]">
+                        <img src="bild1.jpg" 
+                            alt="Profilbild von Max Mustermann" 
+                            class="profile-img w-full h-full rounded-full transition-transform duration-500 hover:scale-105"
+                            onerror="this.onerror=null; this.src='https://placehold.co/1000x1000/BCBABE/0E1A2B?text=Foto+fehlt';"
+                        >
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Über mich Sektion (#about) -->
+        <section id="about" class="container mx-auto py-16 md:py-24">
+            <h3 class="text-4xl font-bold text-center text-[#0E1A2B] mb-4">
+                Über <span class="color-primary">mich</span>
+            </h3>
+            <!-- Absatztext wird dunkleres Grau -->
+            <p class="text-gray-600 text-center text-lg max-w-2xl mx-auto mb-12">
+                Meine Reise in die Welt der Entwicklung begann mit einer einfachen Zeile Code.
+            </p>
+
+            <!-- Boxen-Hintergrund auf Warm Gray ändern, Rahmen auf Primärfarbe -->
+            <div class="bg-accent p-8 md:p-12 rounded-xl shadow-2xl border border-primary flex flex-col lg:flex-row gap-8 items-center">
+                
+                <!-- Statistiken / Kurzinfos -->
+                <div class="lg:w-1/2 space-y-4">
+                    <!-- Textfarbe auf Dunkelblau ändern -->
+                    <p class="text-[#0E1A2B] leading-relaxed text-lg">
+                        Ich bin Max Mustermann, ein Full Stack Entwickler mit 5 Jahren Erfahrung in der Konzeption und Implementierung von skalierbaren Webanwendungen. Mein Fokus liegt auf JavaScript, React und Node.js.
+                    </p>
+                    <p class="text-[#0E1A2B] leading-relaxed text-lg">
+                        Ich liebe es, komplexe Probleme in einfache, elegante Lösungen zu verwandeln und setze mich leidenschaftlich für sauberen Code und eine hervorragende Benutzererfahrung ein. Lassen Sie uns zusammenarbeiten!
+                    </p>
+
+                    <div class="grid grid-cols-2 gap-4 pt-4 text-[#0E1A2B]">
+                        <div class="text-lg">
+                            <span class="font-bold color-primary">Alter:</span> 30 Jahre
+                        </div>
+                        <div class="text-lg">
+                            <span class="font-bold color-primary">Email:</span> max@example.com
+                        </div>
+                        <div class="text-lg">
+                            <span class="font-bold color-primary">Standort:</span> Berlin, Deutschland
+                        </div>
+                        <div class="text-lg">
+                            <span class="font-bold color-primary">Freiberuflich:</span> Verfügbar
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kurze Timeline / Zertifikate -->
+                <div class="lg:w-1/2 mt-8 lg:mt-0">
+                    <h4 class="text-2xl font-semibold text-[#0E1A2B] mb-6 border-b border-primary pb-2">Erfahrungshighlights</h4>
+                    <ul class="space-y-4 text-[#0E1A2B]">
+                        <li class="flex items-start">
+                            <i data-lucide="check-circle" class="w-6 h-6 color-primary mr-3 mt-1 flex-shrink-0"></i>
+                            <p class="text-[#0E1A2B]">Senior Developer bei TechCorp (2020 - Heute)</p>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="check-circle" class="w-6 h-6 color-primary mr-3 mt-1 flex-shrink-0"></i>
+                            <p class="text-[#0E1A2B]">Über 15 erfolgreiche Full-Stack-Projekte abgeschlossen</p>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="check-circle" class="w-6 h-6 color-primary mr-3 mt-1 flex-shrink-0"></i>
+                            <p class="text-[#0E1A2B]">Zertifiziert in Cloud-Technologien (AWS/Azure)</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fähigkeiten Sektion (#skills) -->
+        <section id="skills" class="container mx-auto py-16 md:py-24">
+            <h3 class="text-4xl font-bold text-center text-[#0E1A2B] mb-4">
+                Meine <span class="color-primary">Fähigkeiten</span>
+            </h3>
+            <!-- Absatztext wird dunkleres Grau -->
+            <p class="text-gray-600 text-center text-lg max-w-2xl mx-auto mb-12">
+                Ein Auszug der Technologien, die ich täglich einsetze und beherrsche.
+            </p>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
+                <!-- Skill Cards: Hintergrund auf Warm Gray ändern, Text auf Dunkelblau -->
+                <div class="bg-accent p-6 rounded-xl text-center shadow-lg hover:shadow-[0_0_15px_#1995AD] transition duration-300 transform hover:scale-105 border border-primary cursor-default">
+                    <i data-lucide="codesandbox" class="w-10 h-10 color-primary mx-auto mb-3"></i>
+                    <p class="text-[#0E1A2B] font-semibold">HTML & CSS</p>
+                    <p class="text-sm text-gray-700">95%</p>
+                </div>
+                <div class="bg-accent p-6 rounded-xl text-center shadow-lg hover:shadow-[0_0_15px_#1995AD] transition duration-300 transform hover:scale-105 border border-primary cursor-default">
+                    <i data-lucide="file-code" class="w-10 h-10 color-primary mx-auto mb-3"></i>
+                    <p class="text-[#0E1A2B] font-semibold">JavaScript</p>
+                    <p class="text-sm text-gray-700">90%</p>
+                </div>
+                <div class="bg-accent p-6 rounded-xl text-center shadow-lg hover:shadow-[0_0_15px_#1995AD] transition duration-300 transform hover:scale-105 border border-primary cursor-default">
+                    <i data-lucide="react" class="w-10 h-10 color-primary mx-auto mb-3"></i>
+                    <p class="text-[#0E1A2B] font-semibold">React/Next.js</p>
+                    <p class="text-sm text-gray-700">85%</p>
+                </div>
+                <div class="bg-accent p-6 rounded-xl text-center shadow-lg hover:shadow-[0_0_15px_#1995AD] transition duration-300 transform hover:scale-105 border border-primary cursor-default">
+                    <i data-lucide="server" class="w-10 h-10 color-primary mx-auto mb-3"></i>
+                    <p class="text-[#0E1A2B] font-semibold">Node.js / Express</p>
+                    <p class="text-sm text-gray-700">80%</p>
+                </div>
+                <div class="bg-accent p-6 rounded-xl text-center shadow-lg hover:shadow-[0_0_15px_#1995AD] transition duration-300 transform hover:scale-105 border border-primary cursor-default">
+                    <i data-lucide="database" class="w-10 h-10 color-primary mx-auto mb-3"></i>
+                    <p class="text-[#0E1A2B] font-semibold">Datenbanken (SQL/NoSQL)</p>
+                    <p class="text-sm text-gray-700">75%</p>
+                </div>
+                <div class="bg-accent p-6 rounded-xl text-center shadow-lg hover:shadow-[0_0_15px_#1995AD] transition duration-300 transform hover:scale-105 border border-primary cursor-default">
+                    <i data-lucide="cloud" class="w-10 h-10 color-primary mx-auto mb-3"></i>
+                    <p class="text-[#0E1A2B] font-semibold">Cloud / Git</p>
+                    <p class="text-sm text-gray-700">88%</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Sektion (#portfolio) -->
+        <section id="portfolio" class="container mx-auto py-16 md:py-24">
+            <h3 class="text-4xl font-bold text-center text-[#0E1A2B] mb-4">
+                Meine <span class="color-primary">Projekte</span>
+            </h3>
+            <!-- Absatztext wird dunkleres Grau -->
+            <p class="text-gray-600 text-center text-lg max-w-2xl mx-auto mb-12">
+                Eine Auswahl meiner besten Arbeiten, die meine Vielseitigkeit zeigen.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Projekt Cards: Hintergrund auf Warm Gray ändern, Text auf Dunkelblau -->
+                <div class="bg-accent rounded-xl shadow-xl overflow-hidden group border border-primary hover:border-[#A1D6E2] transition duration-300">
+                    <img src="https://placehold.co/600x400/BCBABE/0E1A2B?text=E-Commerce+App" 
+                         alt="E-Commerce Projekt" 
+                         class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                    >
+                    <div class="p-6">
+                        <h4 class="text-xl font-semibold text-[#0E1A2B] mb-2">Skalierbare E-Commerce-Plattform</h4>
+                        <p class="text-gray-700 text-sm mb-4">React, Node.js, MongoDB</p>
+                        <a href="#" target="_blank" class="color-primary font-medium hover:underline flex items-center">
+                            Details ansehen
+                            <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-accent rounded-xl shadow-xl overflow-hidden group border border-primary hover:border-[#A1D6E2] transition duration-300">
+                    <img src="https://placehold.co/600x400/BCBABE/0E1A2B?text=Dashboard" 
+                         alt="Analysedashboard" 
+                         class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                    >
+                    <div class="p-6">
+                        <h4 class="text-xl font-semibold text-[#0E1A2B] mb-2">Echtzeit-Analyse-Dashboard</h4>
+                        <p class="text-gray-700 text-sm mb-4">Vue.js, Firebase, D3.js</p>
+                        <a href="#" target="_blank" class="color-primary font-medium hover:underline flex items-center">
+                            Details ansehen
+                            <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-accent rounded-xl shadow-xl overflow-hidden group border border-primary hover:border-[#A1D6E2] transition duration-300">
+                    <img src="https://placehold.co/600x400/BCBABE/0E1A2B?text=Landing+Page" 
+                         alt="Marketing Landingpage" 
+                         class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                    >
+                    <div class="p-6">
+                        <h4 class="text-xl font-semibold text-[#0E1A2B] mb-2">Hochkonvertierende Landing Page</h4>
+                        <p class="text-gray-700 text-sm mb-4">HTML, Tailwind CSS, Vanilla JS</p>
+                        <a href="#" target="_blank" class="color-primary font-medium hover:underline flex items-center">
+                            Details ansehen
+                            <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Kontakt Sektion (#contact) -->
+        <section id="contact" class="container mx-auto py-16 md:py-24">
+            <h3 class="text-4xl font-bold text-center text-[#0E1A2B] mb-4">
+                Kontakt <span class="color-primary">aufnehmen</span>
+            </h3>
+            <!-- Absatztext wird dunkleres Grau -->
+            <p class="text-gray-600 text-center text-lg max-w-2xl mx-auto mb-12">
+                Haben Sie ein Projekt? Lassen Sie uns über Ihre Ideen sprechen!
+            </p>
+
+            <!-- Boxen-Hintergrund auf Warm Gray ändern, Rahmen auf Primärfarbe -->
+            <div class="max-w-xl mx-auto bg-accent p-8 md:p-12 rounded-xl shadow-2xl border border-primary">
+                <!-- Formular wurde für Formspree angepasst -->
+                <!-- WICHTIG: Ersetzen Sie IHRE_EMAIL@example.com durch Ihre ECHTE E-Mail-Adresse! -->
+                <form action="https://formspree.io/f/f/IHRE_EMAIL@example.com" method="POST" class="space-y-6">
+                    <div>
+                        <!-- Label Textfarbe auf Dunkelblau ändern -->
+                        <label for="name" class="block text-sm font-medium text-[#0E1A2B] mb-2">Name</label>
+                        <!-- 'name' Attribut für Formspree beibehalten -->
+                        <input type="text" id="name" name="name" required
+                               class="w-full p-3 bg-[#F1F1F2] border border-primary rounded-lg focus:ring-primary focus:border-primary text-[#0E1A2B]">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-[#0E1A2B] mb-2">Email</label>
+                        <!-- '_replyto' Feld ist optional, stellt aber sicher, dass Sie direkt antworten können -->
+                        <input type="email" id="email" name="_replyto" required
+                               class="w-full p-3 bg-[#F1F1F2] border border-primary rounded-lg focus:ring-primary focus:border-primary text-[#0E1A2B]">
+                    </div>
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-[#0E1A2B] mb-2">Nachricht</label>
+                        <!-- 'name' Attribut für Formspree beibehalten -->
+                        <textarea id="message" name="message" rows="5" required
+                                  class="w-full p-3 bg-[#F1F1F2] border border-primary rounded-lg focus:ring-primary focus:border-primary text-[#0E1A2B]"></textarea>
+                    </div>
+                    <!-- Zusätzliches verstecktes Feld für Formspree, um die Weiterleitung zu steuern (optional) -->
+                    <input type="hidden" name="_subject" value="Neue Portfolio-Kontaktanfrage">
+
+                    <!-- Submit Button: Textfarbe auf Overcast (#F1F1F2) ändern, Hover-Hintergrund auf Ice (#A1D6E2) -->
+                    <button type="submit" class="w-full px-8 py-3 bg-primary text-[#F1F1F2] font-bold rounded-lg shadow-lg hover:bg-[#A1D6E2] hover:text-[#0E1A2B] transition duration-300 transform hover:scale-[1.02] active:scale-95">
+                        Nachricht senden
+                    </button>
+                    <!-- Die Bestätigungs-Nachricht von Formspree wird nach dem Senden auf einer separaten Seite angezeigt. -->
+                </form>
+            </div>
+        </section>
+
+    </div> <!-- Ende des Haupt-Content-Divs -->
+    
+    <!-- Footer -->
+    <footer class="bg-accent border-t border-primary py-6 mt-16">
+        <!-- Textfarbe auf Dunkelblau/Grau ändern -->
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-700">
+            <p>&copy; 2024 Max Mustermann. Alle Rechte vorbehalten. | Gebaut im Glacier Design.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript für die mobile Navigation -->
+    <script>
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.querySelector('#menu-toggle i');
+        const navLinks = document.querySelectorAll('#mobile-menu a');
+
+        // Funktion zum Umschalten des Menüs
+        function toggleMenu() {
+            const isHidden = mobileMenu.classList.toggle('hidden');
+            // Icon wechseln: Hamburger zu X und umgekehrt
+            menuIcon.setAttribute('data-lucide', isHidden ? 'menu' : 'x');
+            // Aktualisieren der Lucide-Icons
+            lucide.createIcons(); 
+        }
+
+        // Event Listener für den Toggle-Button
+        menuToggle.addEventListener('click', toggleMenu);
+
+        // Schließe das Menü, wenn ein Link angeklickt wird (auf Mobilgeräten)
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (!mobileMenu.classList.contains('hidden')) {
+                    toggleMenu();
+                }
+            });
+        });
+
+        // Erstellen der Lucide-Icons beim Laden der Seite
+        window.onload = function() {
+            lucide.createIcons(); 
+        };
+        
+        /* Die Funktion showContactMessage() wurde entfernt, da Formspree die Übermittlung übernimmt. */
+    </script>
+</body>
+</html>
